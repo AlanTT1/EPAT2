@@ -32,8 +32,7 @@ public class ToDoListTest {
 
    @After
    public void tearDown() throws Exception {
-      // Put any clean up here
-      // This project is simple and there are not much to clean
+      // Not necessary
    }
 
    @Test
