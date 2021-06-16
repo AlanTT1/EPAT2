@@ -6,6 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="ToDoList Workshop Java">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="D:/software/eclipse-2020-06/eclipse/"/>
+    <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
@@ -15,6 +16,10 @@
     </path>
     <path id="ToDoList Workshop Java.classpath">
         <pathelement location="bin"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <path id="run.ToDoListTest.classpath">
+        <path refid="ToDoList Workshop Java.classpath"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
     <target name="init">
@@ -36,26 +41,8 @@
         <delete dir="bin"/>
     </target>
     <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project, ToDoListTest, junitreport" name="build"/>
-  	<target name="ToDoListTest">
-  		<mkdir dir="${junit.output.dir}"/>
-  		<junit fork="yes" printsummary="withOutAndErr">
-  			<formatter type="xml" />
-  			<test name="ToDoListTest" todir="${junit.output.dir}" />
-  			<jvmarg line="-ea"/>
-  			<classpath refid="run.ToDoListTest.classpath"></classpath>
-  		</junit>
-  	</target>
-  	<target name="junitreport">
-  		<junitreport todir="${junit.output.dir}">
-  			<fileset dir="${junit.output.dir}">
-    			<include name="TEST-*.xml"/>    			
-			</fileset>
-  			<report format="frames" todir="${junit.output.dir}"/>
-  		</junitreport>	
-  	</target>
-    <target name="build-subprojects"/>
-      	
+<target depends="build-subprojects,build-project, ToDoListTest, junitreport" name="build"/>
+  	<target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
@@ -77,5 +64,22 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="ToDoListTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="sg.edu.nus.iss.epat.tdd.workshop.ToDoListTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="run.ToDoListTest.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
     </target>
 </project>
